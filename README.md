@@ -37,5 +37,5 @@ This behavior is **disabled by default** and can be toggled in the mod config (`
 
 ## Links
 
-- [Source Code](https://github.com/SrNadien/AE2-Utilities)
-- [Issue Tracker](https://https://github.com/SrNadien/AE2-Utilities/issues)
+- [Source Code](https://github.com/SrNadien/AE2-Useful-Utilities)
+- [Issue Tracker](https://https://github.com/SrNadien/AE2-Useful-Utilities/issues)
