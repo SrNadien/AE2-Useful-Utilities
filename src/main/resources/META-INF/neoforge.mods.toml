@@ -1,0 +1,57 @@
+modLoader = "javafml"
+loaderVersion = "${loader_version}"
+license = "${license}"
+
+[[mods]]
+    modId = "${modid}"
+    version = "${mod_version}"
+    displayName = "${mod_named}"
+    description = "Quality-of-life additions for Applied Energistics 2. Enhances wireless terminals with extra functionality. Curios support included. Optional chunk loading for Infinity/Dimensional Card users."
+
+[[mixins]]
+    config = "ae2usefulutilities.mixins.json"
+
+[[mixins]]
+    config = "ae2usefulutilities.infinitybooster.mixins.json"
+
+[[dependencies.${modid}]]
+    modId = "neoforge"
+    type = "required"
+    versionRange = "[${neoversion},)"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.${modid}]]
+    modId = "minecraft"
+    type = "required"
+    versionRange = "[${mcversion},)"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.${modid}]]
+    modId = "ae2"
+    type = "required"
+    versionRange = "[${ae2_version},)"
+    ordering = "AFTER"
+    side = "BOTH"
+
+[[dependencies.${modid}]]
+    modId = "ae2wtlib"
+    type = "required"
+    versionRange = "[${ae2wtlib_version},)"
+    ordering = "AFTER"
+    side = "BOTH"
+
+[[dependencies.${modid}]]
+    modId = "aeinfinitybooster"
+    type = "required"
+    versionRange = "${aeib_version}"
+    ordering = "AFTER"
+    side = "BOTH"
+
+[[dependencies.${modid}]]
+    modId = "curios"
+    type = "optional"
+    versionRange = "${curios_version}"
+    ordering = "AFTER"
+    side = "BOTH"

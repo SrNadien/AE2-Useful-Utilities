@@ -1,0 +1,14 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "nadiendev.ae2usefulutilities.mixin.infinitybooster",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "nadiendev.ae2usefulutilities.mixin.infinitybooster.InfinityBoosterMixinPlugin",
+  "mixins": [
+    "MixinWirelessBlockEntity",
+    "MixinWirelessBlockEntityRemove"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
