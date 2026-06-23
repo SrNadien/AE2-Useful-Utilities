@@ -67,6 +67,9 @@ public class PickBlockHandler {
             AEItemKey key = AEItemKey.of(blockItem);
             if (key == null) return;
 
+            // Si el jugador ya tiene el bloque en hotbar o mano secundaria, no extraer nada
+            if (playerHasItemInHotbarOrOffhand(player, key)) return;
+
             MEStorage storage = findStorage(player);
             if (storage == null) return;
 
@@ -83,6 +86,23 @@ public class PickBlockHandler {
                 player.drop(result, false);
             }
         });
+    }
+
+    
+    private boolean playerHasItemInHotbarOrOffhand(ServerPlayer player, AEItemKey key) {
+        // Inventario principal completo: hotbar (0-8) + resto del inventario (9-35)
+        for (int i = 0; i < player.getInventory().items.size(); i++) {
+            ItemStack stack = player.getInventory().items.get(i);
+            if (!stack.isEmpty() && AEItemKey.of(stack) != null && AEItemKey.of(stack).equals(key)) {
+                return true;
+            }
+        }
+        // Mano secundaria (offhand)
+        ItemStack offhand = player.getOffhandItem();
+        if (!offhand.isEmpty() && AEItemKey.of(offhand) != null && AEItemKey.of(offhand).equals(key)) {
+            return true;
+        }
+        return false;
     }
 
     private MEStorage findStorage(ServerPlayer player) {
