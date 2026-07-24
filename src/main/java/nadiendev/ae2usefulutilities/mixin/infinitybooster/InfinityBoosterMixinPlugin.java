@@ -14,7 +14,7 @@ public class InfinityBoosterMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
-        modPresent = FMLLoader.getLoadingModList()
+        modPresent = FMLLoader.getCurrent().getLoadingModList()
                 .getModFileById("aeinfinitybooster") != null;
     }
 

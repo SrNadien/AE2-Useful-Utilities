@@ -3,78 +3,61 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.171'
+    id 'net.neoforged.moddev' version '2.0.141'
 }
 
 version = "${mcversion}-${mod_version}-${tag_lanzador}"
-group = "${author}.${modid}"
+group = "${mod_group_id}"
 base {
     archivesName = "${mod_named}"
 }
 
-// Mojang ships Java 21 to end users in 1.20.5+, so your mod should target Java 21.
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+// Mojang ships Java 25 to end users in 26.1.2, so mods should target Java 25.
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
-//minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
-//minecraft.accessTransformers.entry public net.minecraft.client.Minecraft textureManager # textureManager
+neoForge {
+    // Specify the version of NeoForge to use.
+    version = "${neoversion}"
 
-runs {
-    // applies to all the run configs below
-    configureEach {
-        // Recommended logging data for a userdev environment
-        systemProperty 'forge.logging.markers', 'REGISTRIES'
+    runs {
+        client {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', "${modid}"
+        }
 
-        // Recommended logging level for the console
-        systemProperty 'forge.logging.console.level', 'debug'
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', "${modid}"
+        }
 
-        //Limit ram usage for the dev environment to 4GB
-        jvmArgument '-Xmx2G'
+        data {
+            clientData()
+            programArguments.addAll '--mod', "${modid}", '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
 
-        modSource project.sourceSets.main
-    }
-
-    client {
-        // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-        systemProperty 'forge.enabledGameTestNamespaces', "${modid}"
-    }
-
-    server {
-        systemProperty 'forge.enabledGameTestNamespaces', "${modid}"
-        argument '--nogui'
-    }
-
-    data {
-        // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
-        // workingDirectory project.file('run-data')
-
-        // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-        arguments.addAll '--mod', "${modid}", '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-    }
-}
-
-sourceSets.main.resources {
-    srcDir 'src/generated/resources'
-}
-
-repositories {
-    mavenCentral()
-    maven {
-        url = 'https://maven.creeperhost.net'
-        content {
-            includeGroup("com.refinedmods.refinedstorage")
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
+            jvmArgument '-Xmx2G'
         }
     }
-    maven {
-        url = "https://maven.blamejared.com"
+
+    mods {
+        "${modid}" {
+            sourceSet(sourceSets.main)
+        }
     }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {
+    mavenLocal()
+    mavenCentral()
     maven {
         url = "https://maven.theillusivec4.top/"
     }
-    maven {
-		name = "TerraformersMC"
-		url = "https://maven.terraformersmc.com/"
-	}
-    maven { url "https://maven.shedaniel.me" }
     maven {
         name = "Curse Maven"
         url = "https://cursemaven.com"
@@ -92,29 +75,48 @@ repositories {
 }
 
 dependencies {
-    implementation "net.neoforged:neoforge:${neoversion}"
-
-    //jei
-    compileOnly "mezz.jei:jei-${mcversion}-common-api:${jei_version}"
-    compileOnly "mezz.jei:jei-${mcversion}-neoforge-api:${jei_version}"
-    runtimeOnly "mezz.jei:jei-${mcversion}-neoforge:${jei_version}"
-     
-     // Applied Energistics 2
+    // Applied Energistics 2
     compileOnly "org.appliedenergistics:appliedenergistics2:${ae2_version}"
-    implementation "org.appliedenergistics:appliedenergistics2:${ae2_version}"
-    implementation "org.appliedenergistics:guideme:${guideme_version}"
+    runtimeOnly "org.appliedenergistics:appliedenergistics2:${ae2_version}"
+    compileOnly "org.appliedenergistics:guideme:${guideme_version}"
+    runtimeOnly "org.appliedenergistics:guideme:${guideme_version}"
 
-    // Curios API
+    // Curios API (optional integration)
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
-    //Ae2 Wireless Terminals
-      implementation "de.mari_023:ae2wtlib_api:${ae2wtlib_version}"
-      runtimeOnly "de.mari_023:ae2wtlib:${ae2wtlib_version}"
-
-   // AE Infinity Booster
-   implementation "curse.maven:aeinfinitybooster-559313:${aeib_version}"
+    // AE Infinity Booster
+     implementation "curse.maven:aeinfinitybooster-559313:${aeib_version_id}"
 }
+
+// Expand version properties into the neoforge.mods.toml template.
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            mcversion       : mcversion,
+            mcversion_range : mcversion_range,
+            mod_version     : mod_version,
+            modid           : modid,
+            author          : author,
+            mod_named       : mod_named,
+            mod_name        : mod_name,
+            tag_lanzador    : tag_lanzador,
+            description     : project.findProperty('description'),
+            license         : license,
+            neoversion      : neoversion,
+            loader_version  : loader_version,
+            guideme_version : guideme_version,
+            ae2_version     : ae2_version,
+            curios_version  : curios_version,
+            aeib_version_id : aeib_version_id,
+    ]
+    inputs.properties replaceProperties
+   
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand replaceProperties
+    }
+
+}
+
 
 test {
     enabled = false
@@ -123,41 +125,13 @@ test {
 jar {
     manifest {
         attributes([
-                "Specification-Title": archivesBaseName,
-                "Specification-Vendor": "${author}",
-                "Specification-Version": "1", // We are version 1 of ourselves
-                "Implementation-Title": archivesBaseName,
-                "Implementation-Version": "${version}",
-                "Implementation-Vendor" :"${author}",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Specification-Title"    : "${mod_named}",
+                "Specification-Vendor"   : "${author}",
+                "Specification-Version"  : "1",
+                "Implementation-Title"   : "${mod_named}",
+                "Implementation-Version" : "${version}",
+                "Implementation-Vendor"  : "${author}",
         ])
-    }
-}
-
-tasks.withType(ProcessResources).configureEach {
-    var replaceProperties = [
-            mcversion              : mcversion,
-            mod_version            : mod_version,
-            modid                  : modid,
-            author                 : author,
-            mod_named              : mod_named,
-            mod_name              : mod_name,
-            tag_lanzador           : tag_lanzador,
-            description            : description,
-            license                 : license,
-            neoversion             : neoversion,
-            loader_version        : loader_version,
-            jei_version            : jei_version,
-            guideme_version        : guideme_version,
-            ae2_version            : ae2_version,
-            curios_version             : curios_version,
-            ae2wtlib_version          : ae2wtlib_version,
-            aeib_version             : aeib_version,
-    ]
-    inputs.properties replaceProperties
-
-    filesMatching(['META-INF/neoforge.mods.toml']) {
-        expand replaceProperties
     }
 }
 
@@ -184,5 +158,5 @@ idea {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
-    options.getRelease().set(21)
+    options.getRelease().set(25)
 }

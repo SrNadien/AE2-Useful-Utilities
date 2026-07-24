@@ -8,7 +8,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.lwjgl.glfw.GLFW;
 
 @OnlyIn(Dist.CLIENT)
@@ -27,6 +27,6 @@ public class ClientPickBlockHandler {
         if (hit == null || hit.getType() != HitResult.Type.BLOCK) return;
 
         BlockPos pos = ((BlockHitResult) hit).getBlockPos();
-        PacketDistributor.sendToServer(new PickBlockHandler.PickBlockPayload(pos));
+        ClientPacketDistributor.sendToServer(new PickBlockHandler.PickBlockPayload(pos));
     }
 }

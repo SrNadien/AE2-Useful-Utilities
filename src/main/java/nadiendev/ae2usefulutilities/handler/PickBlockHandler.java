@@ -11,7 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -25,8 +25,8 @@ import nadiendev.ae2usefulutilities.compat.curios.CuriosCompat;
 
 public class PickBlockHandler {
 
-    public static final ResourceLocation PACKET_ID =
-            ResourceLocation.fromNamespaceAndPath("ae2utilities", "pick_block");
+    public static final Identifier PACKET_ID =
+            Identifier.fromNamespaceAndPath("ae2utilities", "pick_block");
 
     public record PickBlockPayload(BlockPos pos) implements CustomPacketPayload {
 
@@ -91,8 +91,9 @@ public class PickBlockHandler {
     
     private boolean playerHasItemInHotbarOrOffhand(ServerPlayer player, AEItemKey key) {
         // Inventario principal completo: hotbar (0-8) + resto del inventario (9-35)
-        for (int i = 0; i < player.getInventory().items.size(); i++) {
-            ItemStack stack = player.getInventory().items.get(i);
+        var mainItems = player.getInventory().getNonEquipmentItems();
+        for (int i = 0; i < mainItems.size(); i++) {
+            ItemStack stack = mainItems.get(i);
             if (!stack.isEmpty() && AEItemKey.of(stack) != null && AEItemKey.of(stack).equals(key)) {
                 return true;
             }
@@ -109,7 +110,7 @@ public class PickBlockHandler {
         if (!(player.level() instanceof ServerLevel serverLevel)) return null;
 
         // Buscar en inventario normal
-        for (ItemStack stack : player.getInventory().items) {
+        for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
             MEStorage storage = tryGetStorage(stack, serverLevel);
             if (storage != null) return storage;
         }

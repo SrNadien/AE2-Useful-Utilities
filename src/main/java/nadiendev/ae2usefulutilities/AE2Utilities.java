@@ -20,7 +20,7 @@ public class AE2Utilities {
         PickBlockHandler handler = new PickBlockHandler();
         modBus.register(handler);
 
-        if (FMLEnvironment.dist == Dist.CLIENT) {
+        if (FMLEnvironment.getDist() == Dist.CLIENT) {
             NeoForge.EVENT_BUS.register(new ClientPickBlockHandler());
         }
     }

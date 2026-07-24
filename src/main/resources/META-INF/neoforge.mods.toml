@@ -14,38 +14,34 @@ license = "${license}"
 [[mixins]]
     config = "ae2usefulutilities.infinitybooster.mixins.json"
 
+[[mixins]]
+    config = "ae2.base.mixins.json"
+
 [[dependencies.${modid}]]
     modId = "neoforge"
     type = "required"
-    versionRange = "[${neoversion},)"
+    versionRange = "${neoversion}"
     ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.${modid}]]
     modId = "minecraft"
     type = "required"
-    versionRange = "[${mcversion},)"
+    versionRange = "${mcversion}"
     ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.${modid}]]
     modId = "ae2"
     type = "required"
-    versionRange = "[${ae2_version},)"
-    ordering = "AFTER"
-    side = "BOTH"
-
-[[dependencies.${modid}]]
-    modId = "ae2wtlib"
-    type = "required"
-    versionRange = "[${ae2wtlib_version},)"
+    versionRange = "${ae2_version}"
     ordering = "AFTER"
     side = "BOTH"
 
 [[dependencies.${modid}]]
     modId = "aeinfinitybooster"
     type = "required"
-    versionRange = "${aeib_version}"
+    versionRange = "${aeib_version_id}"
     ordering = "AFTER"
     side = "BOTH"
 

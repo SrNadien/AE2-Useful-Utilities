@@ -32,7 +32,7 @@ public abstract class MixinWirelessBlockEntity extends AEBaseBlockEntity impleme
     private boolean ae2u$hasChunkLoadCard() {
         ItemStack card = inv.getStackInSlot(0);
         if (card.isEmpty()) return false;
-        String id = card.getItem().builtInRegistryHolder().key().location().toString();
+        String id = card.getItem().builtInRegistryHolder().key().identifier().toString();
         return id.equals("aeinfinitybooster:dimension_card")
                 || id.equals("aeinfinitybooster:infinity_card");
     }
