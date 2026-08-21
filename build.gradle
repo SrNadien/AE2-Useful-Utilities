@@ -114,7 +114,7 @@ dependencies {
       runtimeOnly "de.mari_023:ae2wtlib:${ae2wtlib_version}"
 
    // AE Infinity Booster
-   implementation "curse.maven:aeinfinitybooster-559313:${aeib_version}"
+   runtimeOnly "curse.maven:aeinfinitybooster-559313:${aeib_version}"
 
    // Ae2 Jei Integration - only needed in-game, nothing here compiles against it
    runtimeOnly "curse.maven:ae2-jei-integration-1074338:7727898"

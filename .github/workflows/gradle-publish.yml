@@ -33,17 +33,58 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: false
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches/modules-2
+            ~/.gradle/caches/neoformruntime
+          key: gradle-deps-${{ runner.os }}-${{ hashFiles('gradle.properties', 'build.gradle') }}
+          restore-keys: |
+            gradle-deps-${{ runner.os }}-
 
       - name: Make gradlew executable
         run: chmod +x gradlew
 
+      # Shared CI runner IPs get rate limited by third-party mod mavens, so a build that
+      # only failed while downloading dependencies is retried instead of failing the release.
       - name: Build
-        run: ./gradlew build
+        run: |
+          set -o pipefail
+          for attempt in 1 2 3; do
+            echo "::group::Gradle build (attempt ${attempt}/3)"
+            if ./gradlew build --stacktrace 2>&1 | tee "gradle-attempt-${attempt}.log"; then
+              echo "::endgroup::"
+              exit 0
+            fi
+            echo "::endgroup::"
+
+            if ! grep -qE "Could not resolve|Could not GET|Too Many Requests|Read timed out|Connection reset" "gradle-attempt-${attempt}.log"; then
+              echo "Build failed for a reason other than dependency downloads. Not retrying."
+              exit 1
+            fi
+
+            if [ "${attempt}" -lt 3 ]; then
+              delay=$((attempt * 45))
+              echo "Dependency download failed. Retrying in ${delay}s."
+              sleep "${delay}"
+            fi
+          done
+          echo "Build still failing after 3 attempts."
+          exit 1
 
       - name: Create Tag
         run: |
-          git tag v${{ steps.gradle_props.outputs.release_version }}
-          git push origin v${{ steps.gradle_props.outputs.release_version }}
+          TAG="v${{ steps.gradle_props.outputs.release_version }}"
+          if git ls-remote --exit-code --tags origin "refs/tags/${TAG}" >/dev/null 2>&1; then
+            echo "Tag ${TAG} already exists, reusing it."
+          else
+            git tag "${TAG}"
+            git push origin "${TAG}"
+          fi
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
