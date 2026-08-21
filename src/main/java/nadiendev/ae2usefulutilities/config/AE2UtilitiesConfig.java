@@ -10,6 +10,10 @@ public class AE2UtilitiesConfig {
 
     public static ModConfigSpec.BooleanValue INFINITY_BOOSTER_CHUNK_LOADING;
 
+    public static ModConfigSpec.BooleanValue PATTERN_UPLOADER_ENABLED;
+    public static ModConfigSpec.BooleanValue PATTERN_RESTOCK_BLANKS;
+    public static ModConfigSpec.BooleanValue PATTERN_RETURN_BUTTON;
+
     private AE2UtilitiesConfig(ModConfigSpec.Builder builder) {
         builder.push("compat");
         builder.push("aeinfinitybooster");
@@ -21,6 +25,31 @@ public class AE2UtilitiesConfig {
                         "Requires AEInfinityBooster to be present, otherwise has no effect."
                 )
                 .define("chunkLoadingEnabled", true);
+
+        builder.pop();
+        builder.pop();
+
+        builder.push("pattern");
+        builder.push("uploader");
+
+        PATTERN_UPLOADER_ENABLED = builder
+                .comment(
+                        "Adds an upload button next to Encode in the Pattern Encoding Terminal. It lists every",
+                        "Pattern Provider on the network and sends the patterns you carry to the one you pick.",
+                        "ALT + Encode does the same."
+                )
+                .define("enabled", true);
+
+        builder.pop();
+        builder.push("restocker");
+
+        PATTERN_RESTOCK_BLANKS = builder
+                .comment("Pull Blank Patterns from ME storage when encoding with an empty blank pattern slot.")
+                .define("autoRestock", true);
+
+        PATTERN_RETURN_BUTTON = builder
+                .comment("Show a button on the Pattern Encoding Terminal that turns the encoded pattern back to blank.")
+                .define("returnButton", true);
 
         builder.pop();
         builder.pop();

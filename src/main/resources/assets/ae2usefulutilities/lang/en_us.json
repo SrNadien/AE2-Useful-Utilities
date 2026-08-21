@@ -1,0 +1,14 @@
+{
+  "ae2usefulutilities.pattern.button.return": "Pattern Restocker",
+  "ae2usefulutilities.pattern.button.return.desc": "Clear the encoded pattern and return the blank",
+  "ae2usefulutilities.pattern.button.upload": "Pattern Uploader",
+  "ae2usefulutilities.pattern.button.upload.desc": "Pick a Pattern Provider and send it every pattern you are carrying (also ALT + Encode)",
+  "ae2usefulutilities.pattern.picker.title": "Choose a Pattern Provider",
+  "ae2usefulutilities.pattern.picker.search": "Search",
+  "ae2usefulutilities.pattern.picker.slots": "(%s) x%s",
+  "ae2usefulutilities.pattern.picker.unnamed": "Pattern Provider",
+  "ae2usefulutilities.pattern.picker.empty": "No Pattern Provider with free slots on this network",
+  "ae2usefulutilities.pattern.upload.done": "Uploader: %s of %s patterns sent to %s",
+  "ae2usefulutilities.pattern.upload.nogrid": "Uploader: this terminal is not connected to a network",
+  "ae2usefulutilities.pattern.upload.gone": "Uploader: that Pattern Provider is no longer reachable"
+}

@@ -1,0 +1,14 @@
+{
+  "ae2usefulutilities.pattern.button.return": "Reabastecedor de patrones",
+  "ae2usefulutilities.pattern.button.return.desc": "Vacía el patrón codificado y devuelve el patrón en blanco",
+  "ae2usefulutilities.pattern.button.upload": "Subidor de patrones",
+  "ae2usefulutilities.pattern.button.upload.desc": "Elige un proveedor de patrones y envíale todos los patrones que lleves encima (también ALT + Codificar)",
+  "ae2usefulutilities.pattern.picker.title": "Elige un proveedor de patrones",
+  "ae2usefulutilities.pattern.picker.search": "Buscar",
+  "ae2usefulutilities.pattern.picker.slots": "(%s) x%s",
+  "ae2usefulutilities.pattern.picker.unnamed": "Proveedor de patrones",
+  "ae2usefulutilities.pattern.picker.empty": "No hay ningún proveedor de patrones con huecos libres en esta red",
+  "ae2usefulutilities.pattern.upload.done": "Subidor: %s de %s patrones enviados a %s",
+  "ae2usefulutilities.pattern.upload.nogrid": "Subidor: esta terminal no está conectada a una red",
+  "ae2usefulutilities.pattern.upload.gone": "Subidor: ese proveedor de patrones ya no es accesible"
+}

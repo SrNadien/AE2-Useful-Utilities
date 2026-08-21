@@ -86,7 +86,7 @@ dependencies {
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
     // AE Infinity Booster
-     implementation "curse.maven:aeinfinitybooster-559313:${aeib_version_id}"
+     runtimeOnly "curse.maven:aeinfinitybooster-559313:${aeib_version_id}"
 }
 
 // Expand version properties into the neoforge.mods.toml template.
