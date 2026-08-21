@@ -3,8 +3,17 @@
   "minVersion": "0.8",
   "package": "nadiendev.ae2usefulutilities.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [],
-  "client": [],
+  "mixins": [
+    "pattern.AEBaseMenuAccessor",
+    "pattern.MEStorageMenuAccessor",
+    "pattern.PatternEncodingTermMenuMixin"
+  ],
+  "client": [
+    "pattern.EncodedPatternItemMixin",
+    "pattern.PatternEncodingTermMenuClientMixin",
+    "pattern.PatternEncodingTermScreenMixin",
+    "pattern.ScreenAccessor"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

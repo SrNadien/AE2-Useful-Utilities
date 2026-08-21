@@ -14,6 +14,9 @@ license = "${license}"
 [[mixins]]
     config = "ae2usefulutilities.infinitybooster.mixins.json"
 
+[[mixins]]
+    config = "ae2usefulutilities.jei.mixins.json"
+
 [[dependencies.${modid}]]
     modId = "neoforge"
     type = "required"

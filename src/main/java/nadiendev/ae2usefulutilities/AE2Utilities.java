@@ -3,6 +3,7 @@ package nadiendev.ae2usefulutilities;
 import nadiendev.ae2usefulutilities.config.AE2UtilitiesConfig;
 import nadiendev.ae2usefulutilities.handler.ClientPickBlockHandler;
 import nadiendev.ae2usefulutilities.handler.PickBlockHandler;
+import nadiendev.ae2usefulutilities.pattern.network.PatternNetwork;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -16,6 +17,8 @@ public class AE2Utilities {
 
     public AE2Utilities(IEventBus modBus, ModContainer container) {
         container.registerConfig(ModConfig.Type.COMMON, AE2UtilitiesConfig.CONFIG_SPEC);
+
+        modBus.addListener(PatternNetwork::register);
 
         PickBlockHandler handler = new PickBlockHandler();
         modBus.register(handler);

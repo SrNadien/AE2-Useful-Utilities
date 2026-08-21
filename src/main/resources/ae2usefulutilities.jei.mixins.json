@@ -1,0 +1,13 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "nadiendev.ae2usefulutilities.mixin.jei",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "nadiendev.ae2usefulutilities.mixin.jei.JeiMixinPlugin",
+  "client": [
+    "RecipeTransferUtilMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

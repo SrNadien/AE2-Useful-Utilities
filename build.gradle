@@ -97,6 +97,7 @@ dependencies {
     //jei
     compileOnly "mezz.jei:jei-${mcversion}-common-api:${jei_version}"
     compileOnly "mezz.jei:jei-${mcversion}-neoforge-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${mcversion}-neoforge:${jei_version}"
     runtimeOnly "mezz.jei:jei-${mcversion}-neoforge:${jei_version}"
      
      // Applied Energistics 2
@@ -114,6 +115,9 @@ dependencies {
 
    // AE Infinity Booster
    implementation "curse.maven:aeinfinitybooster-559313:${aeib_version}"
+
+   // Ae2 Jei Integration - only needed in-game, nothing here compiles against it
+   runtimeOnly "curse.maven:ae2-jei-integration-1074338:7727898"
 }
 
 test {
