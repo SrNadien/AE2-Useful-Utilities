@@ -14,6 +14,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -83,7 +84,7 @@ public class PickBlockHandler {
 
             ItemStack result = key.toStack((int) extracted);
             if (!player.getInventory().add(result)) {
-                player.drop(result, false);
+                player.drop(result, false, Prediction.SERVER_ONLY);
             }
         });
     }

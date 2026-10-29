@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.141'
+    id 'net.neoforged.moddev' version '2.0.148'
 }
 
 version = "${mcversion}-${mod_version}-${tag_lanzador}"
@@ -54,6 +54,9 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     mavenLocal()
+    maven {
+        url = "https://maven.blamejared.com"
+    }
     mavenCentral()
     maven {
         url = "https://maven.theillusivec4.top/"
@@ -81,6 +84,12 @@ dependencies {
     compileOnly "org.appliedenergistics:guideme:${guideme_version}"
     runtimeOnly "org.appliedenergistics:guideme:${guideme_version}"
 
+    // JEI (optional integration)
+    compileOnly "mezz.jei:jei-${mcversion}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${mcversion}-neoforge-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${mcversion}-neoforge:${jei_version}"
+    runtimeOnly "mezz.jei:jei-${mcversion}-neoforge:${jei_version}"
+
     // Curios API (optional integration)
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
@@ -103,6 +112,7 @@ tasks.withType(ProcessResources).configureEach {
             description     : project.findProperty('description'),
             license         : license,
             neoversion      : neoversion,
+            neoversion_range: neoversion_range,
             loader_version  : loader_version,
             guideme_version : guideme_version,
             ae2_version     : ae2_version,

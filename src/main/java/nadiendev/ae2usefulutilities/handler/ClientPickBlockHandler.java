@@ -1,5 +1,6 @@
 package nadiendev.ae2usefulutilities.handler;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.BlockHitResult;
@@ -9,19 +10,18 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
-import org.lwjgl.glfw.GLFW;
 
 @OnlyIn(Dist.CLIENT)
 public class ClientPickBlockHandler {
 
     @SubscribeEvent
     public void onMouseButton(InputEvent.MouseButton.Pre event) {
-        if (event.getButton() != GLFW.GLFW_MOUSE_BUTTON_MIDDLE) return;
-        if (event.getAction() != GLFW.GLFW_PRESS) return;
+        if (event.getButton() != InputConstants.MOUSE_BUTTON_MIDDLE) return;
+        if (event.getAction() != InputConstants.PRESS) return;
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null || mc.player == null) return;
-        if (mc.screen != null) return;
+        if (mc.gui.screen() != null) return;
 
         HitResult hit = mc.hitResult;
         if (hit == null || hit.getType() != HitResult.Type.BLOCK) return;
