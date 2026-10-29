@@ -4,6 +4,7 @@ import appeng.api.crafting.PatternDetailsHelper;
 import appeng.api.inventories.InternalInventory;
 import appeng.api.networking.IGrid;
 import appeng.api.networking.IGridNode;
+import appeng.helpers.patternprovider.PatternContainer;
 import appeng.helpers.patternprovider.PatternProviderLogicHost;
 import appeng.menu.SlotSemantics;
 import appeng.menu.me.items.PatternEncodingTermMenu;
@@ -46,14 +47,14 @@ public final class PatternUploadService {
         }
 
         List<ProviderEntry> entries = new ArrayList<>();
-        for (PatternProviderLogicHost host : providers(grid)) {
+        for (PatternContainer host : providers(grid)) {
             // A misbehaving modded provider must not take the whole list down with it.
             try {
                 ProviderKey key = keyOf(host);
                 if (key == null) {
                     continue;
                 }
-                InternalInventory inv = host.getLogic().getPatternInv();
+                InternalInventory inv = host.getTerminalPatternInventory();
                 int free = 0;
                 for (int i = 0; i < inv.size(); i++) {
                     if (inv.getStackInSlot(i).isEmpty()) {
@@ -85,9 +86,9 @@ public final class PatternUploadService {
             return;
         }
 
-        Set<PatternProviderLogicHost> all = providers(grid);
-        PatternProviderLogicHost target = null;
-        for (PatternProviderLogicHost host : all) {
+        Set<PatternContainer> all = providers(grid);
+        PatternContainer target = null;
+        for (PatternContainer host : all) {
             if (key.equals(keyOf(host))) {
                 target = host;
                 break;
@@ -101,9 +102,9 @@ public final class PatternUploadService {
         // Overflow spills into other providers sharing the same name, so picking one of a bank of identical
         // machines fills the whole bank instead of stopping at the first full one.
         Component targetName = nameOf(target);
-        List<PatternProviderLogicHost> candidates = new ArrayList<>();
+        List<PatternContainer> candidates = new ArrayList<>();
         candidates.add(target);
-        for (PatternProviderLogicHost host : all) {
+        for (PatternContainer host : all) {
             if (host != target && nameOf(host).getString().equals(targetName.getString())) {
                 candidates.add(host);
             }
@@ -142,26 +143,26 @@ public final class PatternUploadService {
                 .withStyle(ChatFormatting.GRAY));
     }
 
-    private static Set<PatternProviderLogicHost> providers(IGrid grid) {
-        Set<PatternProviderLogicHost> hosts = new HashSet<>();
+    private static Set<PatternContainer> providers(IGrid grid) {
+        Set<PatternContainer> hosts = new HashSet<>();
         for (Class<?> clazz : grid.getMachineClasses()) {
-            if (PatternProviderLogicHost.class.isAssignableFrom(clazz)) {
+            if (PatternContainer.class.isAssignableFrom(clazz)) {
                 @SuppressWarnings("unchecked")
-                Class<PatternProviderLogicHost> hostClass = (Class<PatternProviderLogicHost>) clazz;
+                Class<PatternContainer> hostClass = (Class<PatternContainer>) clazz;
                 hosts.addAll(grid.getMachines(hostClass));
             }
         }
         return hosts;
     }
 
-    private static ItemStack insertInto(List<PatternProviderLogicHost> candidates, ItemStack stack) {
+    private static ItemStack insertInto(List<PatternContainer> candidates, ItemStack stack) {
         ItemStack remaining = stack;
-        for (PatternProviderLogicHost host : candidates) {
+        for (PatternContainer host : candidates) {
             if (remaining.isEmpty()) {
                 break;
             }
             try {
-                remaining = host.getLogic().getPatternInv().addItems(remaining);
+                remaining = host.getTerminalPatternInventory().addItems(remaining);
             } catch (RuntimeException ignored) {
                 // try the next provider
             }
@@ -169,7 +170,7 @@ public final class PatternUploadService {
         return remaining;
     }
 
-    private static Component nameOf(PatternProviderLogicHost host) {
+    private static Component nameOf(PatternContainer host) {
         try {
             var group = host.getTerminalGroup();
             if (group != null && group.name() != null) {
@@ -182,8 +183,8 @@ public final class PatternUploadService {
     }
 
     @Nullable
-    private static ProviderKey keyOf(PatternProviderLogicHost host) {
-        BlockEntity blockEntity = host.getBlockEntity();
+    private static ProviderKey keyOf(PatternContainer host) {
+        BlockEntity blockEntity = blockEntityOf(host);
         if (blockEntity == null) {
             return null;
         }
@@ -194,6 +195,20 @@ public final class PatternUploadService {
         BlockPos pos = blockEntity.getBlockPos();
         var side = host instanceof AEBasePart part ? part.getSide() : null;
         return ProviderKey.of(level.dimension().location(), pos, side);
+    }
+
+    @Nullable
+    private static BlockEntity blockEntityOf(PatternContainer host) {
+        if (host instanceof PatternProviderLogicHost providerHost) {
+            return providerHost.getBlockEntity();
+        }
+        if (host instanceof BlockEntity blockEntity) {
+            return blockEntity;
+        }
+        if (host instanceof AEBasePart part) {
+            return part.getBlockEntity();
+        }
+        return null;
     }
 
     @Nullable

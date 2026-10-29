@@ -1,10 +1,12 @@
 {
   "required": false,
   "minVersion": "0.8",
-  "package": "nadiendev.ae2usefulutilities.mixin.jei",
+  "package": "nadiendev.ae2usefulutilities.compat.jei.mixin",
   "compatibilityLevel": "JAVA_21",
-  "plugin": "nadiendev.ae2usefulutilities.mixin.jei.JeiMixinPlugin",
+  "plugin": "nadiendev.ae2usefulutilities.compat.jei.mixin.JeiMixinPlugin",
   "client": [
+    "BookmarkOverlayMixin",
+    "IngredientListRendererMixin",
     "RecipeTransferUtilMixin"
   ],
   "injectors": {

@@ -1,10 +1,11 @@
-package nadiendev.ae2usefulutilities.pattern.client;
+package nadiendev.ae2usefulutilities.compat.jei;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.recipe.IRecipeManager;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.runtime.IJeiRuntime;
+import nadiendev.ae2usefulutilities.pattern.client.RecipeFinder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;

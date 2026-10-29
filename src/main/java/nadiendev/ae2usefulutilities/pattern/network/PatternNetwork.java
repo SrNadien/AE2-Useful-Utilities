@@ -1,5 +1,8 @@
 package nadiendev.ae2usefulutilities.pattern.network;
 
+import nadiendev.ae2usefulutilities.stock.network.NetworkStockRequestC2SPacket;
+import nadiendev.ae2usefulutilities.stock.network.NetworkStockS2CPacket;
+import nadiendev.ae2usefulutilities.stock.network.OpenCraftC2SPacket;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
@@ -26,5 +29,14 @@ public final class PatternNetwork {
         registrar.playToClient(ProviderListS2CPacket.TYPE,
                 ProviderListS2CPacket.STREAM_CODEC,
                 ProviderListS2CPacket::handle);
+        registrar.playToServer(NetworkStockRequestC2SPacket.TYPE,
+                NetworkStockRequestC2SPacket.STREAM_CODEC,
+                NetworkStockRequestC2SPacket::handle);
+        registrar.playToServer(OpenCraftC2SPacket.TYPE,
+                OpenCraftC2SPacket.STREAM_CODEC,
+                OpenCraftC2SPacket::handle);
+        registrar.playToClient(NetworkStockS2CPacket.TYPE,
+                NetworkStockS2CPacket.STREAM_CODEC,
+                NetworkStockS2CPacket::handle);
     }
 }

@@ -1,5 +1,6 @@
 package nadiendev.ae2usefulutilities.pattern.client;
 
+import nadiendev.ae2usefulutilities.compat.jei.RecipeFinderJEI;
 import net.minecraft.network.chat.Component;
 import net.neoforged.fml.ModList;
 import org.jetbrains.annotations.Nullable;

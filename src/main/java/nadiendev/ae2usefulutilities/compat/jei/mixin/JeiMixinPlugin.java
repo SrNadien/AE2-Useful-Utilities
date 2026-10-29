@@ -1,4 +1,4 @@
-package nadiendev.ae2usefulutilities.mixin.jei;
+package nadiendev.ae2usefulutilities.compat.jei.mixin;
 
 import net.neoforged.fml.loading.FMLLoader;
 import org.objectweb.asm.tree.ClassNode;

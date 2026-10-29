@@ -1,4 +1,4 @@
-package nadiendev.ae2usefulutilities.mixin.jei;
+package nadiendev.ae2usefulutilities.compat.jei.mixin;
 
 import appeng.menu.me.items.PatternEncodingTermMenu;
 import mezz.jei.api.gui.IRecipeLayoutDrawable;

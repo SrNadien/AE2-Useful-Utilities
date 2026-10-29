@@ -1,13 +1,34 @@
 package nadiendev.ae2usefulutilities.compat.curios;
 
+import appeng.api.networking.IGrid;
 import appeng.api.storage.MEStorage;
 import nadiendev.ae2usefulutilities.handler.PickBlockHandler;
+import appeng.menu.locator.MenuLocators;
+import nadiendev.ae2usefulutilities.stock.server.TerminalAccess;
+import nadiendev.ae2usefulutilities.stock.server.TerminalLocator;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.CuriosApi;
 
 
 public class CuriosCompat {
+
+    @Nullable
+    public static TerminalAccess findAccess(ServerPlayer player, ServerLevel level) {
+        return CuriosApi.getCuriosInventory(player)
+                .map(handler -> {
+                    var equipped = handler.getEquippedCurios();
+                    for (int slot = 0; slot < equipped.getSlots(); slot++) {
+                        IGrid grid = TerminalLocator.gridFromTerminal(equipped.getStackInSlot(slot), level);
+                        if (grid != null) {
+                            return new TerminalAccess(grid, MenuLocators.forCurioSlot(slot));
+                        }
+                    }
+                    return null;
+                })
+                .orElse(null);
+    }
 
     public static MEStorage findStorage(ServerPlayer player, ServerLevel level) {
         return CuriosApi.getCuriosInventory(player)

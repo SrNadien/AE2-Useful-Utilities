@@ -36,6 +36,7 @@ runs {
     client {
         // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
         systemProperty 'forge.enabledGameTestNamespaces', "${modid}"
+        programArguments.addAll '--quickPlaySingleplayer', 'New World'
     }
 
     server {
@@ -111,13 +112,11 @@ dependencies {
 
     //Ae2 Wireless Terminals
       implementation "de.mari_023:ae2wtlib_api:${ae2wtlib_version}"
+      compileOnly "de.mari_023:ae2wtlib:${ae2wtlib_version}"
       runtimeOnly "de.mari_023:ae2wtlib:${ae2wtlib_version}"
 
    // AE Infinity Booster
    runtimeOnly "curse.maven:aeinfinitybooster-559313:${aeib_version}"
-
-   // Ae2 Jei Integration - only needed in-game, nothing here compiles against it
-   runtimeOnly "curse.maven:ae2-jei-integration-1074338:7727898"
 }
 
 test {
