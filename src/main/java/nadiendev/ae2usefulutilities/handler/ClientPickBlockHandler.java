@@ -21,7 +21,7 @@ public class ClientPickBlockHandler {
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null || mc.player == null) return;
-        if (mc.screen != null) return;
+        if (mc.gui.screen() != null) return;
 
         HitResult hit = mc.hitResult;
         if (hit == null || hit.getType() != HitResult.Type.BLOCK) return;

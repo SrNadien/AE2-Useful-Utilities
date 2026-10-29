@@ -1,0 +1,51 @@
+# Keeps the workflow actions current on its own. Without this, action versions
+# silently rot until a runtime deprecation breaks a release.
+# To add new branches you just copy the format and put the branch name in "target-branch"
+version: 2
+updates:
+  # Neo/1.21.1
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "chore"
+    groups:
+      actions:
+        patterns: ["*"]
+
+  # Neo/26.1.2
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    target-branch: "Neo/26.1.2"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "chore"
+    groups:
+      actions:
+        patterns: ["*"]
+
+  # Neo/26.2
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    target-branch: "Neo/26.2"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "chore"
+    groups:
+      actions:
+        patterns: ["*"]
+
+  # Neo/26.3
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    target-branch: "Neo/26.3"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "chore"
+    groups:
+      actions:
+        patterns: ["*"]

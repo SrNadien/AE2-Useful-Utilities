@@ -3,6 +3,7 @@ package nadiendev.ae2usefulutilities.config;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
+
 public class AE2UtilitiesConfig {
 
     public static final AE2UtilitiesConfig CONFIG;
@@ -13,6 +14,9 @@ public class AE2UtilitiesConfig {
     public static ModConfigSpec.BooleanValue PATTERN_UPLOADER_ENABLED;
     public static ModConfigSpec.BooleanValue PATTERN_RESTOCK_BLANKS;
     public static ModConfigSpec.BooleanValue PATTERN_RETURN_BUTTON;
+
+    public static ModConfigSpec.BooleanValue NETWORK_STOCK_ENABLED;
+    public static ModConfigSpec.IntValue NETWORK_STOCK_SYNC_TICKS;
 
     private AE2UtilitiesConfig(ModConfigSpec.Builder builder) {
         builder.push("compat");
@@ -35,8 +39,8 @@ public class AE2UtilitiesConfig {
         PATTERN_UPLOADER_ENABLED = builder
                 .comment(
                         "Adds an upload button next to Encode in the Pattern Encoding Terminal. It lists every",
-                        "Pattern Provider on the network and sends the patterns you carry to the one you pick.",
-                        "ALT + Encode does the same."
+                        "Pattern Container on the network and sends the patterns you carry to the one you pick.",
+                        "ALT + Encode does the same. With JEI it also remembers the recipe category of each pattern."
                 )
                 .define("enabled", true);
 
@@ -52,6 +56,22 @@ public class AE2UtilitiesConfig {
                 .define("returnButton", true);
 
         builder.pop();
+        builder.pop();
+
+        builder.push("networkStock");
+
+        NETWORK_STOCK_ENABLED = builder
+                .comment(
+                        "Lets players with an open AE2 terminal, or a powered linked wireless terminal in their",
+                        "inventory or Curios slots, see what their ME network stores on top of the items in the JEI",
+                        "ingredient list. Turn it off to stop sending network inventory to clients."
+                )
+                .define("enabled", true);
+
+        NETWORK_STOCK_SYNC_TICKS = builder
+                .comment("Minimum ticks between two inventory updates sent to the same player.")
+                .defineInRange("syncTicks", 10, 1, 200);
+
         builder.pop();
     }
 

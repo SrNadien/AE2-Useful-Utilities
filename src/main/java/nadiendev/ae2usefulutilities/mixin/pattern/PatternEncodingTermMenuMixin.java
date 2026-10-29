@@ -9,10 +9,14 @@ import appeng.helpers.IPatternTerminalMenuHost;
 import appeng.menu.me.items.PatternEncodingTermMenu;
 import appeng.menu.slot.RestrictedInputSlot;
 import nadiendev.ae2usefulutilities.config.AE2UtilitiesConfig;
+import nadiendev.ae2usefulutilities.pattern.network.IPatternCategorySync;
 import nadiendev.ae2usefulutilities.pattern.network.PatternNetwork;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,9 +24,10 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PatternEncodingTermMenu.class)
-public abstract class PatternEncodingTermMenuMixin {
+public abstract class PatternEncodingTermMenuMixin implements IPatternCategorySync {
 
     @Shadow
     @Final
@@ -31,6 +36,14 @@ public abstract class PatternEncodingTermMenuMixin {
     @Shadow
     @Final
     private RestrictedInputSlot encodedPatternSlot;
+
+    @Unique
+    private Identifier ae2uu$pendingCategoryId;
+
+    @Override
+    public void ae2uu$setPendingCategoryId(Identifier id) {
+        this.ae2uu$pendingCategoryId = id;
+    }
 
     @Inject(method = "<init>(Lnet/minecraft/world/inventory/MenuType;ILnet/minecraft/world/entity/player/Inventory;Lappeng/helpers/IPatternTerminalMenuHost;Z)V", at = @At("TAIL"))
     private void ae2uu$registerActions(MenuType<?> menuType, int id, Inventory inventory,
@@ -57,6 +70,19 @@ public abstract class PatternEncodingTermMenuMixin {
         if (extracted > 0) {
             this.blankPatternSlot.set(AEItems.BLANK_PATTERN.stack((int) extracted));
         }
+    }
+
+    @Inject(method = "encodePattern", at = @At("TAIL"), remap = false, cancellable = true)
+    private void ae2uu$stampCategory(CallbackInfoReturnable<ItemStack> cir) {
+        ItemStack encoded = cir.getReturnValue();
+        if (encoded == null || encoded.isEmpty() || this.ae2uu$pendingCategoryId == null) {
+            return;
+        }
+        Identifier categoryId = this.ae2uu$pendingCategoryId;
+        this.ae2uu$pendingCategoryId = null;
+        CustomData.update(DataComponents.CUSTOM_DATA, encoded,
+                tag -> tag.putString(PatternNetwork.CATEGORY_TAG, categoryId.toString()));
+        cir.setReturnValue(encoded);
     }
 
     @Unique
