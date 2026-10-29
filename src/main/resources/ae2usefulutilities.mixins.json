@@ -9,6 +9,7 @@
     "pattern.PatternEncodingTermMenuMixin"
   ],
   "client": [
+    "pattern.EncodedPatternItemMixin",
     "pattern.PatternEncodingTermMenuClientMixin",
     "pattern.PatternEncodingTermScreenMixin",
     "pattern.ScreenAccessor"
